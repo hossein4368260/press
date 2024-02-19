@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,19 +20,54 @@ namespace Pree
         {
             InitializeComponent();
         }
-        public string localAdddrese = @"E:\robat";
-        public string foldername;
+        public static Label lbl = new Label();
+        public static string localAdddrese = @"E:\robat";
+        public static string foldername;
         public string UsernameSite;
         public string PasswordSite;
 
-        public string word;
+        public static string word;
+        public static DataGridView dataGridiew = new DataGridView();
+        public static DataGridView dataword2 = new DataGridView();
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
             //***** Load Data in DataGridView ***//
             loadgv();
+            serchword();
+            dataGridiew = dataGridView1;
+            dataword2 = Dataword;
 
 
 
+        }
+
+        public void serchword()
+        {
+            string delimeter = "\t";
+            string tableName = "BooksTable";
+            //  string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "bigtest.sql");
+            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "srch.txt");
+
+            DataSet dataset = new DataSet();
+            StreamReader sr = new StreamReader(fileName);
+
+            dataset.Tables.Add(tableName);
+            dataset.Tables[tableName].Columns.Add("id");
+            dataset.Tables[tableName].Columns.Add("word");
+            dataset.Tables[tableName].Columns.Add("cost");
+
+
+            string allData = sr.ReadToEnd();
+            string[] rows = allData.Split("\r".ToCharArray());
+
+            foreach (string r in rows)
+            {
+                string[] items = r.Split(delimeter.ToCharArray());
+                dataset.Tables[tableName].Rows.Add(items);
+            }
+            this.Dataword.DataSource = dataset.Tables[0].DefaultView;
         }
 
 
@@ -64,18 +100,18 @@ namespace Pree
 
         private void Btn_crtfolder_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            foreach (DataGridViewRow row in dataGridiew.Rows)
             {
                 try
                 {
- 
-                    if (Directory.Exists(localAdddrese)==false)
+
+                    if (Directory.Exists(localAdddrese) == false)
                     {
                         //create Root Folder
                         Directory.CreateDirectory(localAdddrese);
-                       MessageBox.Show(row.Cells["username"].Value.ToString().Replace("@darolife.ir", ""));
+                        MessageBox.Show(row.Cells["username"].Value.ToString().Replace("@darolife.ir", ""));
                     }
-                    
+
                     //Create Sub Folder
                     if (Directory.Exists(@localAdddrese + "/" + row.Cells["username"].Value.ToString().Replace("@darolife.ir", "")) == false)
                     {
@@ -125,19 +161,19 @@ namespace Pree
                 options.AddArgument("--user-data-dir=" + FolderPathToStoreSession);
                 driver = new ChromeDriver(cService, options);
 
-               
+
 
                 //try
                 //{
                 //    foreach (DataGridViewRow row in dataGridView1.Rows)
                 //    {
-                        driver.Navigate().GoToUrl("https://account.presearch.com/login");
-                        driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[1]/input")).SendKeys(UsernameSite);
-                        driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[2]/div/input")).SendKeys(PasswordSite);
-                        driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[3]/div[1]/div[1]/div/label/input")).Click();
-                        MessageBox.Show("continue ?");
-                        //set process id of chrome
-          
+                driver.Navigate().GoToUrl("https://account.presearch.com/login");
+                driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[1]/input")).SendKeys(UsernameSite);
+                driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[2]/div/input")).SendKeys(PasswordSite);
+                driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[3]/div[1]/div[1]/div/label/input")).Click();
+                MessageBox.Show("continue ?");
+                //set process id of chrome
+
                 //    }
                 //}
                 //catch
@@ -156,8 +192,8 @@ namespace Pree
 
 
 
-                    //set process id of chrome
-                    ProcessId = cService.ProcessId;
+                //set process id of chrome
+                ProcessId = cService.ProcessId;
 
                 return driver;
             }
@@ -174,7 +210,9 @@ namespace Pree
             }
         }
 
-        public IWebDriver loadChrome(string FolderPathToStoreSession)
+
+
+        public static IWebDriver loadChrome(string FolderPathToStoreSession)
         {
             ChromeOptions options = null;
             ChromeDriver driver = null;
@@ -203,16 +241,41 @@ namespace Pree
 
                 driver = new ChromeDriver(cService, options);
 
+                Random rnd = new Random();
+                word = dataword2.Rows[rnd.Next(0, dataword2.Rows.Count - 1)].Cells[1].Value.ToString();
+
+                //   dataGridView1.Rows
+                driver.Navigate().GoToUrl("https://presearch.com/search?q=" + word);
 
 
-                driver.Navigate().GoToUrl("https://presearch.com/search?q="+word);
-
-                MessageBox.Show("load Finish");
 
                 //set process id of chrome
                 ProcessId = cService.ProcessId;
 
+
+
+                Thread.Sleep(5000);
+
+                try
+                {
+
+
+                    lbl.Location = new Point(13, 13);
+                    lbl.Text = driver.FindElement(By.XPath("/html/body/div[3]/div[2]/div[2]/div[2]/div[1]/div[2]/div[5]/div[2]/div/div/div[1]/div[1]")).GetAttribute("value");
+
+
+                }
+                catch (Exception)
+                {
+
+                }
+
+
+                driver.Close();
+                driver.Quit();
+                driver.Dispose();
                 return driver;
+
             }
             catch (Exception ex)
             {
@@ -230,70 +293,109 @@ namespace Pree
         private void Btn_save_Click(object sender, EventArgs e)
         {
 
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            for (int i = 0; i < 250; i++)
             {
 
-                if (row.Cells["username"].Value.ToString() != null)
-                {
-                    foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
-                    UsernameSite = row.Cells["username"].Value.ToString();
-                    PasswordSite = row.Cells["password"].Value.ToString();
 
-                    Savechrome(@localAdddrese + "/" + foldername);
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+
+                    if (row.Cells["username"].Value.ToString() != null)
+                    {
+                        foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
+                        UsernameSite = row.Cells["username"].Value.ToString();
+                        PasswordSite = row.Cells["password"].Value.ToString();
+
+                        Savechrome(@localAdddrese + "/" + foldername);
+                    }
+
                 }
-   
             }
 
 
- 
 
-            
+
+
 
 
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-                /*
-            ChromeDriver d = new ChromeDriver();
-            d.Navigate().GoToUrl("https://account.presearch.com/login");
-            try
-            {
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    d.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[1]/input")).SendKeys(row.Cells["username"].Value.ToString());
-                    d.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[2]/div/input")).SendKeys(row.Cells["password"].Value.ToString());
-                    d.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[3]/div[1]/div[1]/div/label/input")).Click();
-                    MessageBox.Show("continue ?");
-                }
-            }
-            catch
-            {
+            //int A = 0;
+            //foreach (DataGridViewRow row in dataGridView1.Rows)
+            //{
 
-            }
-            */
- 
+            //    if (row.Cells["username"].Value.ToString() != null)
+            //    {
+            //        A = A + 1;
+            //        button1.Text = A.ToString();
+            //        //foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
+            //        //UsernameSite = row.Cells["username"].Value.ToString();
+            //        //PasswordSite = row.Cells["password"].Value.ToString();
+
+
+            //    }
+
+            //}
+
+            Random rnd = new Random();
+
+            MessageBox.Show(Dataword.Rows[rnd.Next(0, Dataword.Rows.Count - 1)].Cells[1].Value.ToString());
+
+            //   var q= dataGridView1.Rows[1].Cells[1].Value;
+
 
 
         }
 
         private void ChkUrl_Tick(object sender, EventArgs e)
         {
-       // https://account.presearch.com/tokens/usage-rewards
+
+
+            lbl_cost.Text = lbl.Text;
+
         }
 
         private void Btn_load_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            TimerSerch.Start();
+        }
+
+        public Thread workerThread = new Thread(new ThreadStart(start));
+
+
+
+        private void TimerSerch_Tick(object sender, EventArgs e)
+        {
+
+
+            workerThread.Start();
+
+        }
+
+        public static void start()
+        {
+            for (int i = 0; i < 250; i++)
             {
-
-                if (row.Cells["username"].Value.ToString() != null)
+                try
                 {
-                    foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
-                    loadChrome(@localAdddrese + "/" + foldername);
+                    foreach (DataGridViewRow row in dataGridiew.Rows)
+                    {
+                        if (row.Cells["username"].Value.ToString() != null)
+                        {
+                            foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
+                            loadChrome(@localAdddrese + "/" + foldername);
+                        }
+                    }
                 }
-
+                catch { };
             }
         }
+
+
+
+
+
     }
 }

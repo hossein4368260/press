@@ -35,7 +35,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.chkUrl = new System.Windows.Forms.Timer(this.components);
             this.btn_load = new System.Windows.Forms.Button();
+            this.Dataword = new System.Windows.Forms.DataGridView();
+            this.TimerSerch = new System.Windows.Forms.Timer(this.components);
+            this.lbl_cost = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Dataword)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -78,6 +82,7 @@
             // 
             // chkUrl
             // 
+            this.chkUrl.Interval = 3000;
             this.chkUrl.Tick += new System.EventHandler(this.ChkUrl_Tick);
             // 
             // btn_load
@@ -90,11 +95,36 @@
             this.btn_load.UseVisualStyleBackColor = true;
             this.btn_load.Click += new System.EventHandler(this.Btn_load_Click);
             // 
+            // Dataword
+            // 
+            this.Dataword.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Dataword.Location = new System.Drawing.Point(390, 10);
+            this.Dataword.Name = "Dataword";
+            this.Dataword.Size = new System.Drawing.Size(240, 220);
+            this.Dataword.TabIndex = 5;
+            // 
+            // TimerSerch
+            // 
+            this.TimerSerch.Interval = 10000;
+            this.TimerSerch.Tick += new System.EventHandler(this.TimerSerch_Tick);
+            // 
+            // lbl_cost
+            // 
+            this.lbl_cost.AutoSize = true;
+            this.lbl_cost.Font = new System.Drawing.Font("Microsoft YaHei", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_cost.Location = new System.Drawing.Point(79, 40);
+            this.lbl_cost.Name = "lbl_cost";
+            this.lbl_cost.Size = new System.Drawing.Size(114, 42);
+            this.lbl_cost.TabIndex = 6;
+            this.lbl_cost.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 507);
+            this.Controls.Add(this.lbl_cost);
+            this.Controls.Add(this.Dataword);
             this.Controls.Add(this.btn_load);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Btn_save);
@@ -104,7 +134,9 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Dataword)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -116,6 +148,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer chkUrl;
         private System.Windows.Forms.Button btn_load;
+        private System.Windows.Forms.DataGridView Dataword;
+        private System.Windows.Forms.Timer TimerSerch;
+        private System.Windows.Forms.Label lbl_cost;
     }
 }
 
