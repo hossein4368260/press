@@ -362,19 +362,20 @@ namespace Pree
             TimerSerch.Start();
         }
 
-        public Thread workerThread = new Thread(new ThreadStart(start));
+       // public Thread workerThread = new Thread(new ThreadStart(start));
 
 
 
         private void TimerSerch_Tick(object sender, EventArgs e)
         {
 
+            start();
 
-            workerThread.Start();
+
 
         }
 
-        public static void start()
+        public  void start()
         {
             for (int i = 0; i < 250; i++)
             {
