@@ -32,14 +32,18 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btn_crtfolder = new System.Windows.Forms.Button();
             this.Btn_save = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.CreateMail = new System.Windows.Forms.Button();
             this.chkUrl = new System.Windows.Forms.Timer(this.components);
             this.btn_load = new System.Windows.Forms.Button();
             this.Dataword = new System.Windows.Forms.DataGridView();
             this.TimerSerch = new System.Windows.Forms.Timer(this.components);
             this.lbl_cost = new System.Windows.Forms.Label();
+            this.EnailC = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Dataword)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EnailC)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -70,15 +74,15 @@
             this.Btn_save.UseVisualStyleBackColor = true;
             this.Btn_save.Click += new System.EventHandler(this.Btn_save_Click);
             // 
-            // button1
+            // CreateMail
             // 
-            this.button1.Location = new System.Drawing.Point(392, 388);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.CreateMail.Location = new System.Drawing.Point(704, 472);
+            this.CreateMail.Name = "CreateMail";
+            this.CreateMail.Size = new System.Drawing.Size(240, 23);
+            this.CreateMail.TabIndex = 3;
+            this.CreateMail.Text = "Create Mail";
+            this.CreateMail.UseVisualStyleBackColor = true;
+            this.CreateMail.Click += new System.EventHandler(this.Button1_Click);
             // 
             // chkUrl
             // 
@@ -105,28 +109,59 @@
             // 
             // TimerSerch
             // 
-            this.TimerSerch.Interval = 10000;
+            this.TimerSerch.Interval = 100000;
             this.TimerSerch.Tick += new System.EventHandler(this.TimerSerch_Tick);
             // 
             // lbl_cost
             // 
             this.lbl_cost.AutoSize = true;
             this.lbl_cost.Font = new System.Drawing.Font("Microsoft YaHei", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_cost.Location = new System.Drawing.Point(79, 40);
+            this.lbl_cost.Location = new System.Drawing.Point(24, 21);
             this.lbl_cost.Name = "lbl_cost";
             this.lbl_cost.Size = new System.Drawing.Size(114, 42);
             this.lbl_cost.TabIndex = 6;
             this.lbl_cost.Text = "label1";
+            // 
+            // EnailC
+            // 
+            this.EnailC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.EnailC.Location = new System.Drawing.Point(704, 316);
+            this.EnailC.Name = "EnailC";
+            this.EnailC.Size = new System.Drawing.Size(240, 150);
+            this.EnailC.TabIndex = 7;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(602, 472);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(96, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Load Form @";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click_1);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(378, 433);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 507);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.EnailC);
             this.Controls.Add(this.lbl_cost);
             this.Controls.Add(this.Dataword);
             this.Controls.Add(this.btn_load);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.CreateMail);
             this.Controls.Add(this.Btn_save);
             this.Controls.Add(this.btn_crtfolder);
             this.Controls.Add(this.dataGridView1);
@@ -135,6 +170,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Dataword)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EnailC)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,12 +181,15 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btn_crtfolder;
         private System.Windows.Forms.Button Btn_save;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button CreateMail;
         private System.Windows.Forms.Timer chkUrl;
         private System.Windows.Forms.Button btn_load;
         private System.Windows.Forms.DataGridView Dataword;
         private System.Windows.Forms.Timer TimerSerch;
         private System.Windows.Forms.Label lbl_cost;
+        private System.Windows.Forms.DataGridView EnailC;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

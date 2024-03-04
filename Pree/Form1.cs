@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,29 @@ namespace Pree
 {
     public partial class Form1 : Form
     {
+
+
+        //public Thread thread1 = new Thread(Thread1Job);
+ 
+
+        //public  void Thread1Job()
+        //{
+        //    int a = 0;
+        //} 
+
+        //thread1.Start();
+        //thread2.Start();
+        //thread3.Start();
+
+
+
+
+
+
+
+
+
+
         public Form1()
         {
             InitializeComponent();
@@ -48,7 +72,8 @@ namespace Pree
             string delimeter = "\t";
             string tableName = "BooksTable";
             //  string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "bigtest.sql");
-            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "srch.txt");
+            // string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "srch.txt");
+            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "dataword.txt");
 
             DataSet dataset = new DataSet();
             StreamReader sr = new StreamReader(fileName);
@@ -75,8 +100,10 @@ namespace Pree
         {
             string delimeter = "\t";
             string tableName = "BooksTable";
-            //  string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "bigtest.sql");
-            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "user.txt");
+
+            //  string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "user.txt");
+            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "db.txt");
+
 
             DataSet dataset = new DataSet();
             StreamReader sr = new StreamReader(fileName);
@@ -100,6 +127,8 @@ namespace Pree
 
         private void Btn_crtfolder_Click(object sender, EventArgs e)
         {
+            dataGridView1.DataSource = null;
+
             foreach (DataGridViewRow row in dataGridiew.Rows)
             {
                 try
@@ -146,7 +175,6 @@ namespace Pree
             ChromeDriver driver = null;
             try
             {
-                //chrome process id
                 int ProcessId = -1;
                 //time to wait until open chrome
                 //var TimeToWait = TimeSpan.FromMinutes(TimeToWaitInMinutes);
@@ -162,42 +190,29 @@ namespace Pree
                 driver = new ChromeDriver(cService, options);
 
 
-
-                //try
-                //{
-                //    foreach (DataGridViewRow row in dataGridView1.Rows)
-                //    {
                 driver.Navigate().GoToUrl("https://account.presearch.com/login");
                 driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[1]/input")).SendKeys(UsernameSite);
                 driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[2]/div/input")).SendKeys(PasswordSite);
                 driver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div[2]/div[3]/div[1]/form/div[3]/div[1]/div[1]/div/label/input")).Click();
-                MessageBox.Show("continue ?");
-                //set process id of chrome
-
-                //    }
-                //}
-                //catch
-                //{ }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-                //set process id of chrome
+                while (true)
+                {
+                    if (driver.Url == "https://account.presearch.com/")
+                    {
+                        driver.Close();
+                        driver.Quit();
+                        driver.Dispose();
+                        break;
+                    }
+                }
+ 
                 ProcessId = cService.ProcessId;
 
                 return driver;
             }
-            catch (Exception ex)
+            catch  ( Exception ex )
             {
                 if (driver != null)
                 {
@@ -207,7 +222,7 @@ namespace Pree
                 }
                 driver = null;
                 throw ex;
-            }
+             }
         }
 
 
@@ -215,36 +230,39 @@ namespace Pree
         public static IWebDriver loadChrome(string FolderPathToStoreSession)
         {
             ChromeOptions options = null;
+
             ChromeDriver driver = null;
+
+            //    
+            //   driver.Manage().Window.Minimize();
             try
             {
-                //chrome process id
-                int ProcessId = -1;
-                //time to wait until open chrome
-                //var TimeToWait = TimeSpan.FromMinutes(TimeToWaitInMinutes);
-                ChromeDriverService cService = ChromeDriverService.CreateDefaultService();
 
-                //hide dos screen
+                int ProcessId = -1;
+                ChromeDriverService cService = ChromeDriverService.CreateDefaultService();
                 cService.HideCommandPromptWindow = true;
 
                 options = new ChromeOptions();
-
-                //session file directory
                 options.AddArgument("--user-data-dir=" + FolderPathToStoreSession);
-                //options.AddArgument("--no-sandbox");
 
-                //options.AddArgument("--headless=new");
 
-                //Add EditThisCookie Extension
-                //options.AddArguments("chrome.switches", "--disable-extensions");
-                //options.AddExtensions("\\ChromeExtensions\\editthiscookie.crx");
+                //int ProcessId = -1;
+                //ChromeDriverService cService =ChromeDriverService.CreateDefaultService();
+                ////hide dos screen
+                //cService.HideCommandPromptWindow = true;
+                //options = new ChromeOptions();
+                ////options.AddArguments("chrome.switches", "--disable-extensions");
+
+                ////session file directory
+                //options.AddArgument("--user-data-dir=" + FolderPathToStoreSession);
+                //driver = new ChromeDriver(cService, options);
+ 
+             //   MessageBox.Show(FolderPathToStoreSession);
 
                 driver = new ChromeDriver(cService, options);
-
+                driver.Manage().Window.Minimize();
                 Random rnd = new Random();
                 word = dataword2.Rows[rnd.Next(0, dataword2.Rows.Count - 1)].Cells[1].Value.ToString();
-
-                //   dataGridView1.Rows
                 driver.Navigate().GoToUrl("https://presearch.com/search?q=" + word);
 
 
@@ -270,7 +288,6 @@ namespace Pree
 
                 }
 
-
                 driver.Close();
                 driver.Quit();
                 driver.Dispose();
@@ -279,7 +296,7 @@ namespace Pree
             }
             catch (Exception ex)
             {
-                if (driver != null)
+                 if (driver != null)
                 {
                     driver.Close();
                     driver.Quit();
@@ -322,28 +339,64 @@ namespace Pree
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            //int A = 0;
-            //foreach (DataGridViewRow row in dataGridView1.Rows)
-            //{
+            string delimeter = "\t";
+            string tableName = "BooksTable";
+            //  string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "bigtest.sql");
+            string fileName = string.Format("{0}/databases/{1}", AppDomain.CurrentDomain.BaseDirectory, "Mail.txt");
 
-            //    if (row.Cells["username"].Value.ToString() != null)
-            //    {
-            //        A = A + 1;
-            //        button1.Text = A.ToString();
-            //        //foldername = row.Cells["username"].Value.ToString().Replace("@darolife.ir", "");
-            //        //UsernameSite = row.Cells["username"].Value.ToString();
-            //        //PasswordSite = row.Cells["password"].Value.ToString();
+            DataSet dataset = new DataSet();
+            StreamReader sr = new StreamReader(fileName);
+
+            dataset.Tables.Add(tableName);
+            dataset.Tables[tableName].Columns.Add("Username");
+
+            string allData = sr.ReadToEnd();
+            string[] rows = allData.Split("\r".ToCharArray());
+
+            foreach (string r in rows)
+            {
+                string[] items = r.Split(delimeter.ToCharArray());
+                dataset.Tables[tableName].Rows.Add(items);
+            }
+            this.EnailC.DataSource = dataset.Tables[0].DefaultView;
 
 
-            //    }
 
-            //}
+            ChromeOptions options = null;
+            ChromeDriver ds = null;
+            ChromeDriverService cService = ChromeDriverService.CreateDefaultService();
+            cService.HideCommandPromptWindow = true;
+            options = new ChromeOptions();
+            ds = new ChromeDriver(cService, options);
+
+
 
             Random rnd = new Random();
+            var q = rnd.Next(10000000, 900000000);
 
-            MessageBox.Show(Dataword.Rows[rnd.Next(0, Dataword.Rows.Count - 1)].Cells[1].Value.ToString());
+            ds.Navigate().GoToUrl("https://2193181509.cloudylink.com:3333/user/email/create-account");
+            ds.FindElement(By.XPath(@"//*[@id=""username""]")).SendKeys("daroli");
+            ds.FindElement(By.XPath("password")).SendKeys("x7n33d5or");
 
-            //   var q= dataGridView1.Rows[1].Cells[1].Value;
+            ds.FindElement(By.XPath("/html/body/div[1]/section/div/div[1]/div[2]/button/span/span")).Click();
+
+            DialogResult result = MessageBox.Show("Do you want to close this window?", "Close Window", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                foreach (DataGridViewRow item in EnailC.Rows)
+                {
+                    //  d.Navigate().GoToUrl("https://2193181509.cloudylink.com:3333/user/email/create-account");
+
+                    ds.FindElement(By.XPath("/html/body/div[1]/div[1]/main/section/div/div[2]/div[2]/section/div[1]/div/div[1]/div/div/div[2]/input")).SendKeys(item.Cells["username"].Value.ToString());
+                    ds.FindElement(By.XPath("/html/body/div[1]/div[1]/main/section/div/div[2]/div[2]/section/div[2]/div/div[1]/div/div/div/div[2]/input")).SendKeys(q.ToString());
+                    ds.FindElement(By.XPath("/html/body/div[1]/div[1]/main/section/div/div[2]/div[2]/div/button")).Click();
+
+                    WriteNotepad(item.Cells["username"].Value.ToString(), q.ToString());
+                }
+            }
+            else
+            {
+            }
 
 
 
@@ -362,7 +415,7 @@ namespace Pree
             TimerSerch.Start();
         }
 
-       // public Thread workerThread = new Thread(new ThreadStart(start));
+        // public Thread workerThread = new Thread(new ThreadStart(start));
 
 
 
@@ -375,9 +428,10 @@ namespace Pree
 
         }
 
-        public  void start()
+        public void start()
         {
-            for (int i = 0; i < 250; i++)
+
+            for (int i = 0; i < 25; i++)
             {
                 try
                 {
@@ -390,13 +444,95 @@ namespace Pree
                         }
                     }
                 }
-                catch { };
+                catch//(/*Exception ex*/)
+                { /* MessageBox.Show(ex.Message);*/  };
+
             }
+            //  Shutdown();
+
+        }
+
+
+
+        public void WriteNotepad(string User, string password)
+        {
+            StreamWriter sw = null;
+            try
+            {
+                sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\LogFile.txt", true);
+                sw.WriteLine(User + " " + password);
+                sw.Flush();
+                sw.Close();
+            }
+            catch
+            {
+                //  Shutdown();
+            }
+            //  Shutdown();
+        }
+
+        private void Button1_Click_1(object sender, EventArgs e)
+        {
+            Form2 frm = new Form2();
+            frm.Show();
+          //  Shutdown();
         }
 
 
 
 
+        /*  void Shutdown()
+          {
+              ManagementBaseObject mboShutdown = null;
+              ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem");
+              mcWin32.Get();
 
+              // You can't shutdown without security privileges
+              mcWin32.Scope.Options.EnablePrivileges = true;
+              ManagementBaseObject mboShutdownParams =
+                       mcWin32.GetMethodParameters("Win32Shutdown");
+
+              // Flag 1 means we want to shut down the system. Use "2" to reboot.
+              mboShutdownParams["Flags"] = "1";
+              mboShutdownParams["Reserved"] = "0";
+              foreach (ManagementObject manObj in mcWin32.GetInstances())
+              {
+                  mboShutdown = manObj.InvokeMethod("Win32Shutdown",
+                                                 mboShutdownParams, null);
+              }
+
+          } */
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            ChromeOptions options = null;
+
+            ChromeDriver driver = null;
+
+            int ProcessId = -1;
+
+            ChromeDriverService cService = ChromeDriverService.CreateDefaultService();
+         //   cService.HideCommandPromptWindow = true;
+
+            options = new ChromeOptions();
+
+            options.AddArgument("--user-data-dir=" + localAdddrese);
+
+            driver = new ChromeDriver(cService, options);
+            driver.Manage().Window.Minimize();
+            Random rnd = new Random();
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
